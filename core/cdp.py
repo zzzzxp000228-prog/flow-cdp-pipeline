@@ -10,6 +10,7 @@ import time
 import websockets
 
 from .config import load_config
+from .selectors import q
 
 
 class FlowCDP:
@@ -145,12 +146,13 @@ class FlowCDP:
     # ---- 页面观察 ----
     async def ensure_all_media_view(self):
         box = await self.js(
-            """(() => {
-                const b = [...document.querySelectorAll('button')].find(x => /所有媒体|All media/i.test(x.innerText || ''));
+            f"""(() => {{
+                const rx = new RegExp({q(self.cfg.sel.text.all_media)}, 'i');
+                const b = [...document.querySelectorAll('button')].find(x => rx.test(x.innerText || ''));
                 if (!b) return null;
                 const r = b.getBoundingClientRect();
-                return { x: r.left + r.width/2, y: r.top + r.height/2 };
-            })()"""
+                return {{ x: r.left + r.width/2, y: r.top + r.height/2 }};
+            }})()"""
         )
         if box:
             await self.tap(box["x"], box["y"])
@@ -159,25 +161,27 @@ class FlowCDP:
     async def get_media_tiles(self):
         """列出画廊里的媒体缩略图，排除 prompt box 内的 chip。"""
         await self.hover_neutral()
+        g = self.cfg.sel.geometry
         return await self.js(
-            """(() => {
-                const ed = document.querySelector('[contenteditable="true"], textarea');
-                const plus = [...document.querySelectorAll('button')].find(x => /在提示框中输入配料|Add ingredients/i.test(x.getAttribute('aria-label') || ''));
+            f"""(() => {{
+                const ed = document.querySelector({q(self.cfg.sel.dom.prompt_editor)});
+                const plusRx = new RegExp({q(self.cfg.sel.text.add_ingredients)}, 'i');
+                const plus = [...document.querySelectorAll('button')].find(x => plusRx.test(x.getAttribute('aria-label') || ''));
                 let promptBox = ed ? ed.parentElement : null;
                 while (promptBox && plus && !promptBox.contains(plus)) promptBox = promptBox.parentElement;
-                const els = [...document.querySelectorAll('img, video')].map(el => {
+                const els = [...document.querySelectorAll({q(self.cfg.sel.dom.gallery_media)})].map(el => {{
                     if (promptBox && promptBox.contains(el)) return null;
                     const r = el.getBoundingClientRect();
-                    return {
+                    return {{
                         tag: el.tagName,
                         src: el.currentSrc || el.src || '',
                         alt: el.alt || '',
                         x: Math.round(r.left), y: Math.round(r.top),
                         w: Math.round(r.width), h: Math.round(r.height)
-                    };
-                }).filter(o => o && o.w >= 80 && o.h >= 80 && o.x >= 50);
+                    }};
+                }}).filter(o => o && o.w >= {g.tile_min_w} && o.h >= {g.tile_min_h} && o.x >= {g.tile_min_x});
                 return els;
-            })()"""
+            }})()"""
         )
 
     async def upload_asset(self, key, fpath):
@@ -190,24 +194,26 @@ class FlowCDP:
             await self.esc()
             await asyncio.sleep(0.4)
             add_btn = await self.js(
-                """(() => {
-                    const b = [...document.querySelectorAll('button')].find(x => /添加媒体菜单|Add media menu/i.test(x.getAttribute('aria-label') || ''));
+                f"""(() => {{
+                    const rx = new RegExp({q(self.cfg.sel.text.add_media_menu)}, 'i');
+                    const b = [...document.querySelectorAll('button')].find(x => rx.test(x.getAttribute('aria-label') || ''));
                     if (!b) return null;
                     const r = b.getBoundingClientRect();
-                    return { x: r.left + r.width/2, y: r.top + r.height/2 };
-                })()"""
+                    return {{ x: r.left + r.width/2, y: r.top + r.height/2 }};
+                }})()"""
             )
             if not add_btn:
                 raise RuntimeError("找不到 Add media menu 按钮")
             await self.tap(add_btn["x"], add_btn["y"])
             await asyncio.sleep(0.7)
             item = await self.js(
-                """(() => {
-                    const b = [...document.querySelectorAll('flow-menu-item button, [role="menu"] button')].find(x => /上传|Upload image|Upload$/i.test((x.innerText || '').trim()));
+                f"""(() => {{
+                    const rx = new RegExp({q(self.cfg.sel.text.upload_item + '$')}, 'i');
+                    const b = [...document.querySelectorAll({q(self.cfg.sel.dom.upload_menu_item)})].find(x => rx.test((x.innerText || '').trim()));
                     if (!b) return null;
                     const r = b.getBoundingClientRect();
-                    return (r.width>0 && r.height>0) ? { x: r.left+r.width/2, y: r.top+r.height/2 } : null;
-                })()"""
+                    return (r.width>0 && r.height>0) ? {{ x: r.left+r.width/2, y: r.top+r.height/2 }} : null;
+                }})()"""
             )
             if not item:
                 print(f"  attempt {attempt+1}: upload item 不可见，重试", flush=True)
@@ -234,7 +240,7 @@ class FlowCDP:
                 raise RuntimeError("既没有 fileChooserOpened 也没有 input[type=file]")
             await self.call("DOM.setFileInputFiles", {"nodeId": query["nodeIds"][-1], "files": [fpath]}, sid=self.sid)
 
-        for sec in range(45):
+        for sec in range(self.cfg.sel.timing.asset_wait_sec):
             await asyncio.sleep(1.0)
             tiles = await self.get_media_tiles()
             fresh = [t for t in tiles if t["src"] and t["src"] not in before]

@@ -68,6 +68,10 @@ class Config:
         self.assets = data.get("assets", {})          # key -> 文件名
         self.asset_search = data.get("asset_search", {})  # 新版 picker 文案正则
 
+        # selector / 坐标阈值：改版时只改配置，不动业务模块
+        from .selectors import Selectors
+        self.sel = Selectors(data.get("selectors", {}))
+
     def ws_url(self):
         """解析 CDP WebSocket 地址。优先用显式 cdp_url，否则读 DevToolsActivePort。"""
         if self.cdp_url:

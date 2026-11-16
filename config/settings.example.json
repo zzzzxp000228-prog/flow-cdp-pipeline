@@ -32,5 +32,32 @@
     "ballroom": "plate_ballroom_empty.jpg",
     "style": "style_gala_mood.jpg",
     "blueprint_seal": "prop_blueprint_seal.jpg"
+  },
+  "_selectors_note": "Flow 改版时只改下面这些值；留空或删掉本段则使用 core/selectors.py 的实测默认值。text 里用 | 分隔中英文，geometry 跟 viewport 强相关。",
+  "selectors": {
+    "text": {
+      "all_media": "所有媒体|All media",
+      "add_ingredients": "在提示框中输入配料|Add ingredients",
+      "asset_search": "搜索资产|Search assets",
+      "result_image": "图像|Image|图片",
+      "clear_prompt": "Clear prompt|清除提示",
+      "settings_trigger": "设置触发器|Settings trigger",
+      "start_generation": "启动世代|Start generation",
+      "failed": "失敗|无法生成|政策|Failed|violate|Unable to generate"
+    },
+    "geometry": {
+      "result_row_min_y": 200,
+      "result_row_max_y": 620,
+      "fresh_tile_max_y": 340,
+      "fresh_tile_max_x": 550,
+      "progress_max_y": 880,
+      "settings_pop_min_y": 450,
+      "settings_pop_max_y": 965
+    },
+    "timing": {
+      "poll_interval": 5.0,
+      "fresh_min_elapsed": 25,
+      "failed_min_elapsed": 15
+    }
   }
 }

@@ -49,6 +49,33 @@ def main():
     from core.transcribe import decode_f32
     ok &= check("transcribe 模块可导入（延迟加载 faster-whisper）", lambda: decode_f32.__name__)
 
+    # selector 外置：默认值可读、配置可覆盖、生成 JS 花括号平衡
+    from core.selectors import Selectors, q
+    from core import assets, settings as settings_mod, prompt as prompt_mod
+    sel = Selectors()
+    ok &= check("Config.sel 已挂载", lambda: type(cfg.sel).__name__)
+    ok &= check("Selectors 默认值完整", lambda: f"{len(vars(sel.text))}/{len(vars(sel.dom))}/{len(vars(sel.geometry))}/{len(vars(sel.timing))}")
+
+    def _js_balance():
+        frags = [assets.js_chips(sel), assets.js_search(sel), assets.js_rows(sel),
+                 settings_mod._trigger_js(sel), prompt_mod._editor_box_js(sel)]
+        for js in frags:
+            if js.count("{") - js.count("}") != 0:
+                raise AssertionError("生成 JS 花括号不平衡")
+        return f"{len(frags)} frags"
+
+    ok &= check("动态 JS 花括号平衡", _js_balance)
+
+    def _sel_override():
+        over = Selectors({"geometry": {"result_row_min_y": 300}, "text": {"asset_search": "Find assets"}})
+        assert "r.y>300" in assets.js_rows(over)
+        assert "Find assets" in assets.js_search(over)
+        assert sel.geometry.result_row_min_y == 200  # 默认未被污染
+        return True
+
+    ok &= check("selector 配置覆盖生效且不污染默认", _sel_override)
+    ok &= check("q() 转义中文与引号", lambda: q('a"b\\c中文'))
+
     plan_path = os.path.join(ROOT, "examples", "build_plan.example.json")
     with open(plan_path, "r", encoding="utf-8") as f:
         plan = json.load(f)

@@ -1,11 +1,24 @@
 """设置锁定：Video / Ingredients / 9:16 / 分辨率 / 时长 / 出图数量。
 
 关键点：count 必须是 x1（省积分），并主动拒绝 x2/x3/x4 误触，避免一次扣多倍积分。
+文案正则 / 浮层坐标 / 滑杆映射从 flow.cfg.sel 读取。
 """
 import asyncio
 import json
 
 from .cdp import FlowCDP
+from .selectors import q
+
+
+def _trigger_js(sel):
+    """定位 Settings trigger 按钮，返回中心坐标 + innerText。"""
+    return f"""(() => {{
+        const rx = new RegExp({q(sel.text.settings_trigger)}, 'i');
+        const b = [...document.querySelectorAll('button')].find(x => rx.test(x.getAttribute('aria-label') || ''));
+        if (!b) return null;
+        const r = b.getBoundingClientRect();
+        return {{ x: r.left + r.width/2, y: r.top + r.height/2, text: b.innerText || '' }};
+    }})()"""
 
 
 async def ensure_settings(flow, target_res="720p", target_dur="10", target_count="x1", allowed_counts=None):
@@ -16,28 +29,30 @@ async def ensure_settings(flow, target_res="720p", target_dur="10", target_count
     await flow.esc()
     await asyncio.sleep(0.3)
 
-    trigger = await flow.js(
-        """(() => {
-            const b = [...document.querySelectorAll('button')].find(x => /设置触发器|Settings trigger/i.test(x.getAttribute('aria-label') || ''));
-            if (!b) return null;
-            const r = b.getBoundingClientRect();
-            return { x: r.left + r.width/2, y: r.top + r.height/2 };
-        })()"""
-    )
+    sel = flow.cfg.sel
+    g = sel.geometry
+
+    trigger = await flow.js(_trigger_js(sel))
     if not trigger:
         raise RuntimeError("找不到 Settings trigger 按钮")
     await flow.tap(trigger["x"], trigger["y"])
     await asyncio.sleep(0.7)
 
     # 浮层里的按钮按文案匹配，中英文都覆盖
-    patterns = [r"^(?:videocam\s*)?(?:视频|Video)$", r"(?:原料|Ingredients)$", r"9:16$", target_res, f"^{target_count}$"]
+    patterns = [
+        r"^(?:videocam\s*)?(?:" + sel.text.video + r")$",
+        r"(?:" + sel.text.ingredients + r")$",
+        r"^" + sel.text.aspect + r"$",
+        target_res,
+        f"^{target_count}$",
+    ]
     for pat in patterns:
         btn = await flow.js(
             f"""(() => {{
-                const rx = new RegExp({json.dumps(pat)}, 'i');
+                const rx = new RegExp({q(pat)}, 'i');
                 const popBtns = [...document.querySelectorAll('button')].filter(b => {{
                     const r = b.getBoundingClientRect();
-                    return r.y > 450 && r.y < 965 && r.width > 15;
+                    return r.y > {g.settings_pop_min_y} && r.y < {g.settings_pop_max_y} && r.width > {g.settings_pop_min_w};
                 }});
                 const m = popBtns.find(b => rx.test((b.innerText || '').trim()));
                 if (!m) return null;
@@ -49,25 +64,22 @@ async def ensure_settings(flow, target_res="720p", target_dur="10", target_count
             await flow.tap(btn["x"], btn["y"])
             await asyncio.sleep(0.25)
 
-    # 时长滑杆：aria-valuenow 映射到秒数。默认 8s=idx5, 10s=idx7。
-    for _ in range(15):
-        cur = await flow.js(
-            """(() => {
-                const b = [...document.querySelectorAll('button')].find(x => /设置触发器|Settings trigger/i.test(x.getAttribute('aria-label') || ''));
-                return b ? b.innerText : '';
-            })()"""
-        )
-        if f"{target_dur}s" in cur or f"{target_dur}秒" in cur:
+    # 时长滑杆：aria-valuenow 映射到秒数。默认 8s=idx5, 10s=idx7（可被配置覆盖）。
+    t = sel.timing
+    target_idx = t.settings_dur_idx_10 if str(target_dur) == "10" else t.settings_dur_idx_8
+    for _ in range(t.settings_dur_steps):
+        cur = await flow.js(_trigger_js(sel))
+        cur_text = cur.get("text", "") if cur else ""
+        if f"{target_dur}s" in cur_text or f"{target_dur}秒" in cur_text:
             break
         val = await flow.js(
-            """(() => {
-                const s = document.querySelector('[role="slider"], input[type="range"]');
+            f"""(() => {{
+                const s = document.querySelector({q(sel.dom.slider)});
                 if (!s) return null;
                 s.focus();
                 return parseInt(s.getAttribute('aria-valuenow') || s.value || '5', 10);
-            })()"""
+            }})()"""
         )
-        target_idx = 7 if str(target_dur) == "10" else 5
         if val is None:
             break
         key, vk = ("ArrowRight", 39) if val < target_idx else ("ArrowLeft", 37)
@@ -75,15 +87,17 @@ async def ensure_settings(flow, target_res="720p", target_dur="10", target_count
         await asyncio.sleep(0.25)
 
     cost = await flow.js(
-        """(() => {
-            const b = [...document.querySelectorAll('button')].find(x => /设置触发器|Settings trigger/i.test(x.getAttribute('aria-label') || ''));
-            const creditEl = [...document.querySelectorAll('div, span, p, a')].find(x => x.children.length === 0 && /消耗|积分|credits/i.test(x.innerText || ''));
-            const cntBtns = [...document.querySelectorAll('button')].filter(x => {
+        f"""(() => {{
+            const rx = new RegExp({q(sel.text.settings_trigger)}, 'i');
+            const b = [...document.querySelectorAll('button')].find(x => rx.test(x.getAttribute('aria-label') || ''));
+            const crx = new RegExp({q(sel.text.credit)}, 'i');
+            const creditEl = [...document.querySelectorAll('div, span, p, a')].find(x => x.children.length === 0 && crx.test(x.innerText || ''));
+            const cntBtns = [...document.querySelectorAll('button')].filter(x => {{
                 const r = x.getBoundingClientRect();
-                return r.y > 450 && r.y < 965 && /^x[1-4]$/i.test((x.innerText || '').trim());
-            }).map(x => ({ txt: (x.innerText || '').trim() }));
-            return { trigger: b ? b.innerText : '', creditMsg: creditEl ? creditEl.innerText : '', countButtons: cntBtns };
-        })()"""
+                return r.y > {g.settings_pop_min_y} && r.y < {g.settings_pop_max_y} && /^x[1-4]$/i.test((x.innerText || '').trim());
+            }}).map(x => ({{ txt: (x.innerText || '').trim() }}));
+            return {{ trigger: b ? b.innerText : '', creditMsg: creditEl ? creditEl.innerText : '', countButtons: cntBtns }};
+        }})()"""
     )
     await flow.esc()
     await asyncio.sleep(0.35)

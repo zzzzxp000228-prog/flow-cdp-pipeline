@@ -23,6 +23,7 @@ flow-cdp-pipeline/
 │   └── settings.json            本地配置（gitignore，含个人路径）
 ├── core/                        可复用模块
 │   ├── config.py                配置加载 + 环境变量覆盖 + 路径解析
+│   ├── selectors.py             selector/坐标/等待参数集中配置（改版只改这里）
 │   ├── cdp.py                   CDP 单连接客户端 + 素材上传
 │   ├── settings.py              Flow 设置锁定（分辨率/时长/x1）
 │   ├── assets.py                参考图挂载（新版搜索 picker + 超时保护）
@@ -190,6 +191,32 @@ python cli_master.py --plan /path/to/build_plan.json
 6. **faster-whisper 的 av 兼容**：新版 av 的 `open()` 没有 `metadata_errors` 参数。`core/transcribe.py` 用 ffmpeg f32le + numpy 绕过内置解码。
 7. **切点检测阈值**：`scdet=threshold=8.0` 是验证值，太低会误检镜头内运动。
 8. **BGM 侧链**：`sidechaincompress` 让人声出现时背景音乐自动闪避，参数在 `core/master.py` 的 `audio_filter`。
+
+## Flow 改版怎么适配（不用翻代码）
+
+所有界面文案正则、DOM 选择器、坐标阈值、等待参数都集中在 `core/selectors.py` 的 `DEFAULT`，
+运行时由 `Config.sel` 暴露（`sel.text.*` / `sel.dom.*` / `sel.geometry.*` / `sel.timing.*`）。
+Flow 改版后按现象定位，只改配置，不动业务模块：
+
+- 按钮/搜索框找不到 -> 改 `selectors.text`（用 `|` 分隔中英文，如 `"搜索资产|Search assets"`）。
+- 元素找得到但坐标不对（结果行、fresh tile、进度条、设置浮层）-> 改 `selectors.geometry`。
+  这些值跟 `viewport` 强相关，改分辨率时一起调。
+- 轮询太慢/太快、重试不够 -> 改 `selectors.timing`。
+
+本地 override 写在 `config/settings.json` 的 `selectors` 段即可，做深合并，未写的字段沿用默认值。
+例：
+
+```json
+{
+  "selectors": {
+    "text": { "asset_search": "Find assets" },
+    "geometry": { "result_row_min_y": 300, "result_row_max_y": 900 },
+    "timing": { "poll_interval": 2.0 }
+  }
+}
+```
+
+`python tests/smoke_test.py` 会校验默认值完整、动态 JS 花括号平衡、配置覆盖生效且不污染默认。
 
 ## 模块化设计
 
