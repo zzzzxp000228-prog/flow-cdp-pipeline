@@ -1,0 +1,36 @@
+{
+  "project_root": ".",
+  "manifest": "flow_manifest.json",
+  "devtools_file": "",
+  "cdp_url": "",
+  "target_url_match": "flow.google.com/project/",
+  "viewport": { "width": 1920, "height": 1080 },
+  "count_lock": "x1",
+  "allowed_counts": ["x1", "x2", "x3", "x4"],
+  "dirs": {
+    "assets": "assets",
+    "candidates": "clips/candidates",
+    "frames": "assets/frames",
+    "audio": "audio",
+    "output": "output",
+    "selected": "clips/selected"
+  },
+  "fonts": {
+    "en": "Arial",
+    "zh": "Microsoft YaHei",
+    "en_bold": "C\\:/Windows/Fonts/arialbd.ttf",
+    "zh_bold": "C\\:/Windows/Fonts/msyhbd.ttc",
+    "en_plain": "C\\:/Windows/Fonts/arial.ttf"
+  },
+  "assets": {
+    "claire": "char_claire.jpg",
+    "claire_wet": "char_claire_wet.jpg",
+    "marcus": "char_marcus.jpg",
+    "chloe": "char_chloe.jpg",
+    "damien": "char_damien.jpg",
+    "foyer": "plate_foyer_empty.jpg",
+    "ballroom": "plate_ballroom_empty.jpg",
+    "style": "style_gala_mood.jpg",
+    "blueprint_seal": "prop_blueprint_seal.jpg"
+  }
+}

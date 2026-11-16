@@ -1,0 +1,16 @@
+{
+  "_comment": "镜头定义。prompt 里的 'Active References Lock' 是默认校验串，可用 verify_token 覆盖。",
+  "sequences": {
+    "1": {
+      "name": "seq01_dawn_takeover",
+      "refs": ["claire", "damien", "foyer"],
+      "res": "720p",
+      "dur": "10",
+      "count": "x1",
+      "max_refs": 3,
+      "poll_timeout": 360,
+      "verify_token": "Active References Lock",
+      "prompt": "Controlled cold dawn corporate takeover at the marble foyer. Real-time 24fps motion, hard cuts only, strictly NO wine glasses anywhere, strictly NO BGM, strictly NO on-screen subtitles.\n\nActive References Lock:\n- Reference 1: Claire, fully dry, ivory belted trench coat (100% match Reference 1).\n- Reference 2: Damien, midnight-black cashmere overcoat (100% match Reference 2).\n- Reference 3: Checkered marble foyer (100% match Reference 3).\n\n[0.0s - 4.2s] SHOT A: Claire enters, says finishing before 3.9s: \"Good morning. As of eight A.M., the takeover is complete.\"\n\n[4.2s - 10.0s] HARD CUT TO SHOT B - TIGHT CLOSE-UP: Claire says finishing before 9.3s: \"Every account, every contract, frozen.\""
+    }
+  }
+}

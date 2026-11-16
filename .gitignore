@@ -1,0 +1,24 @@
+# 本地配置（含个人路径 / 项目 URL）
+config/settings.json
+
+# 生成物
+assets/
+clips/
+audio/
+output/
+flow_manifest.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+venv/
+.venv/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.log

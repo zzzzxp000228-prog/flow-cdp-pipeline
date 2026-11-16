@@ -1,0 +1,39 @@
+{
+  "_comment": "后期总成计划。ss/ee 来自 qa.py 的 scdet 硬切点；subs 的起止是相对该 piece 起点的秒数，来自 transcribe.py 的词级时间戳。",
+  "output_stem": "EXAMPLE_Western_Drama",
+  "qa_sheet": "final_qa_sheet.png",
+  "spec": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 60,
+    "cas": 0.32,
+    "crf_piece": 16,
+    "crf_sub": 17
+  },
+  "endcard": {
+    "duration": 1.8,
+    "line_en": "THE TAKEOVER IS COMPLETE",
+    "line_zh": "收购落定，清算才刚刚开始",
+    "line_next": "EPISODE 04  |  NEXT"
+  },
+  "pieces": [
+    {
+      "id": "seq01a_takeover",
+      "src": "clips/candidates/seq01_cand1.mp4",
+      "ss": 0.25,
+      "ee": 4.30,
+      "subs": [
+        [0.15, 3.70, "Good morning. As of eight A.M., the takeover is complete.", "早上好。八点整，收购正式完成。"]
+      ]
+    },
+    {
+      "id": "seq01b_frozen",
+      "src": "clips/candidates/seq01_cand1.mp4",
+      "ss": 4.33,
+      "ee": 9.95,
+      "subs": [
+        [0.55, 3.30, "Every account, every contract,\\Nfrozen.", "所有账户、所有合约——全部冻结。"]
+      ]
+    }
+  ]
+}

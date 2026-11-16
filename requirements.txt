@@ -1,0 +1,11 @@
+# CDP 连接（必需）
+websockets>=12.0
+
+# 台词转录（可选，仅 cli_transcribe.py 需要）
+faster-whisper>=1.0
+numpy>=1.24
+
+# 说明：
+# - ffmpeg / ffprobe 需单独安装并加入 PATH（生成下载、QA、后期都依赖）。
+# - faster-whisper 首次运行会下载 small.en 模型到缓存目录。
+# - Python 3.10+。
