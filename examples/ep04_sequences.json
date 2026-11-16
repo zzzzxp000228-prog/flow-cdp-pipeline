@@ -1,0 +1,71 @@
+{
+  "_comment": "EP04 承接 EP03（Vance Capital 收购 Sterling，Claire 即 'V' 完成清算开局）。沿用全部既有角色与场景资产，不换脸、不换服装。每镜 2 人脸 + 1 场景/道具板，规避 Flow 三人脸政策过滤。台词自然闭嘴在 3.9s / 9.3s 前，方便卡 scdet 硬切点。",
+  "sequences": {
+    "1": {
+      "name": "ep04_seq01_audit_begins",
+      "refs": ["claire", "damien", "ballroom"],
+      "res": "720p",
+      "dur": "10",
+      "count": "x1",
+      "max_refs": 3,
+      "poll_timeout": 360,
+      "verify_token": "Active References Lock",
+      "prompt": "Controlled cold corporate reckoning in the dark walnut chandelier ballroom converted to a boardroom at dawn. Real-time 24fps motion, hard cuts only, strictly NO wine glasses anywhere, strictly NO BGM, strictly NO on-screen subtitles. Pale morning window light mixing with warm chandelier glow sculpting real skin pores and polished walnut texture, authentic Kodak film grain.\n\nActive References Lock:\n- Reference 1: Claire, adult 24-year-old woman, FULLY DRY and immaculate, ivory belted trench coat over grey silk slip dress, hair neat and dry (100% match face, hair, and outfit to Reference 1 char_claire.jpg — NO wet stains, NO wet hair).\n- Reference 2: Damien, adult 32-year-old man in midnight-black cashmere overcoat over matte black dress shirt (100% match Reference 2).\n- Reference 3: Opulent dark walnut chandelier gala ballroom (100% match Reference 3).\n\n[0.0s - 4.2s] SHOT A - 29 degree MEDIUM FRONT TRACKING INTO THE BALLOOM BOARDROOM:\nFirst visible frame shows Claire striding calmly to the head of the walnut table, fully dry and composed, Damien following half a pace behind in his black cashmere overcoat. Claire speaks in a cool level register finishing before 3.9s with mouth closing cleanly: \"Good morning, gentlemen. The audit of Sterling begins now.\"\n\n[4.2s - 10.0s] HARD CUT TO SHOT B - 18 degree TIGHT CLOSE-UP ON CLAIRE:\nClaire halts, lifts her eyes with flat absolute authority, no smile. She commands crisply finishing before 9.3s with mouth closed: \"Every dollar that left this house in ninety nights—I will trace it.\""
+    },
+    "2": {
+      "name": "ep04_seq02_villains_plot",
+      "refs": ["marcus", "chloe", "ballroom"],
+      "res": "720p",
+      "dur": "10",
+      "count": "x1",
+      "max_refs": 3,
+      "poll_timeout": 360,
+      "verify_token": "Active References Lock",
+      "prompt": "Controlled desperate conspiracy in a dim corner of the dark walnut chandelier ballroom at dawn. Real-time 24fps motion, hard cuts only, strictly NO wine glasses anywhere, strictly NO BGM, strictly NO on-screen subtitles. Cold window light and heavy shadow sculpting tense realistic micro-expressions, strictly NO cartoon grimacing, authentic film grain.\n\nActive References Lock:\n- Reference 1: Marcus, adult 28-year-old man in charcoal three-piece tuxedo, disheveled and bitter (100% match Reference 1).\n- Reference 2: Chloe, adult 24-year-old woman in deep crimson satin high-neck gown, humiliated and angry (100% match face and dress to Reference 2).\n- Reference 3: Opulent dark walnut chandelier gala ballroom (100% match Reference 3).\n\n[0.0s - 4.2s] SHOT A - 29 degree MEDIUM TWO-SHOT IN SHADOW:\nMarcus leans toward Chloe, jaw tight, eyes hard with resentment. He snarls quietly finishing before 3.9s with mouth closing: \"She thinks that crimson seal ended it. It barely started.\"\n\n[4.2s - 10.0s] HARD CUT TO SHOT B - 18 degree TIGHT PROFILE ON MARCUS:\nMarcus straightens, cold determination replacing panic. He states finishing before 9.3s with mouth closing cleanly: \"By dawn, this board will beg me to take her place.\""
+    },
+    "3": {
+      "name": "ep04_seq03_forged_papers",
+      "refs": ["marcus", "blueprint_seal", "ballroom"],
+      "res": "720p",
+      "dur": "10",
+      "count": "x1",
+      "max_refs": 3,
+      "poll_timeout": 360,
+      "verify_token": "Active References Lock",
+      "prompt": "Controlled tense document confrontation in the dark walnut chandelier ballroom. Real-time 24fps motion, hard cuts only, strictly NO wine glasses anywhere, strictly NO BGM, strictly NO on-screen subtitles. Mixed dawn light and warm chandelier glow on real skin pores and paper texture, authentic film grain.\n\nActive References Lock:\n- Reference 1: Marcus, adult 28-year-old man in charcoal three-piece tuxedo, desperate and defiant (100% match Reference 1).\n- Reference 2: Exact open navy leather portfolio showing the ivory SKYLINE TOWER architectural elevation line drawing AND the fixed embossed crimson-gold V wax seal in the lower-right corner (100% match Reference 2, zero wine glass).\n- Reference 3: Opulent dark walnut chandelier gala ballroom (100% match Reference 3).\n\n[0.0s - 4.2s] SHOT A - 47 degree DOWNWARD INSERT TO MEDIUM:\nMarcus spreads the open navy leather blueprint portfolio onto the walnut table, the crimson-gold V seal clearly readable, and taps a forged signature sheet beside it. He declares finishing before 3.9s: \"This signature is mine. That crimson 'V' is a forgery—I swear it.\"\n\n[4.2s - 10.0s] HARD CUT TO SHOT B - 18 degree TIGHT CLOSE-UP ON MARCUS:\nMarcus looks up with a hard, threatening edge. He states finishing before 9.3s with mouth closing cleanly: \"I'll put her in handcuffs before she puts me in a grave.\""
+    },
+    "4": {
+      "name": "ep04_seq04_evidence_authenticated",
+      "refs": ["claire", "damien", "blueprint_seal"],
+      "res": "720p",
+      "dur": "10",
+      "count": "x1",
+      "max_refs": 3,
+      "poll_timeout": 360,
+      "verify_token": "Active References Lock",
+      "prompt": "Controlled cold evidence reveal in a quiet corner of the dark walnut chandelier ballroom. Real-time 24fps motion, hard cuts only, strictly NO wine glasses anywhere, strictly NO BGM, strictly NO on-screen subtitles. Pale morning light mixing with warm chandelier glow on real skin pores and glossy paper, authentic film grain.\n\nActive References Lock:\n- Reference 1: Claire, adult 24-year-old woman, FULLY DRY and composed, ivory belted trench coat over grey silk slip dress (100% match face, hair, outfit to Reference 1 char_claire.jpg — NO wet hair, NO wet stains).\n- Reference 2: Damien, adult 32-year-old man in midnight-black cashmere overcoat over matte black dress shirt (100% match Reference 2).\n- Reference 3: Exact open navy leather portfolio showing the ivory SKYLINE TOWER architectural elevation line drawing AND the fixed embossed crimson-gold V wax seal in the lower-right corner (100% match Reference 3).\n\n[0.0s - 4.2s] SHOT A - 29 degree MEDIUM TWO-SHOT:\nDamien places a slim authenticated evidence folder beside the open blueprint portfolio, then looks to Claire with quiet certainty. He reports finishing before 3.9s: \"Ms. Vance—the security footage is authenticated. Every angle.\"\n\n[4.2s - 10.0s] HARD CUT TO SHOT B - 18 degree TIGHT PROFILE ON CLAIRE:\nClaire does not look at Marcus, only at the crimson V seal, her expression flat and lethal. She states evenly finishing before 9.3s with mouth closing cleanly: \"A forgery always leaves a fingerprint. His are all over it.\""
+    },
+    "5": {
+      "name": "ep04_seq05_marcus_collapses",
+      "refs": ["marcus", "claire", "ballroom"],
+      "res": "720p",
+      "dur": "10",
+      "count": "x1",
+      "max_refs": 3,
+      "poll_timeout": 360,
+      "verify_token": "Active References Lock",
+      "prompt": "Controlled high-tension non-contact status collapse in the dark walnut chandelier ballroom. Strictly non-contact dramatic staging with zero physical touching or striking, hard cuts only, strictly NO wine glasses, strictly NO BGM, strictly NO on-screen subtitles. Mixed cold dawn window light and warm chandelier glow on genuine skin pores.\n\nActive References Lock:\n- Reference 1: Marcus, adult 28-year-old man in charcoal three-piece tuxedo, unraveling and furious (100% match Reference 1).\n- Reference 2: Claire, adult 24-year-old woman, FULLY DRY, ivory belted trench coat over grey silk slip dress, ice-cold composure (100% match Reference 2 char_claire.jpg — NO wet hair, NO wet patches).\n- Reference 3: Opulent dark walnut chandelier gala ballroom (100% match Reference 3).\n\n[0.0s - 4.2s] SHOT A - 29 degree MEDIUM TWO-SHOT, NON-CONTACT:\nMarcus halts two paces short of Claire, hands clenched but not touching her, voice cracking with rage. He accuses finishing before 3.9s: \"You planned this since the night you stood outside in the rain—\"\n\n[4.2s - 10.0s] HARD CUT TO SHOT B - 18 degree TIGHT LOW-ANGLE FAVORING CLAIRE:\nClaire, fully dry and immaculate, looks down at him with flat unblinking calm. She replies icily finishing before 9.3s with mouth closing cleanly: \"I planned it the day you sold me for fifty thousand dollars.\""
+    },
+    "6": {
+      "name": "ep04_seq06_reckoning_declaration",
+      "refs": ["claire", "damien", "foyer"],
+      "res": "720p",
+      "dur": "10",
+      "count": "x1",
+      "max_refs": 3,
+      "poll_timeout": 360,
+      "verify_token": "Active References Lock",
+      "prompt": "Controlled calm regal departure down the bright checkered marble foyer toward the glass hotel entrance at dawn. Real-time 24fps motion, hard cuts only, strictly NO wine glasses anywhere, strictly NO BGM, strictly NO on-screen subtitles. Clean neutral morning daylight sculpting real facial pores and dry trench fabric texture, authentic Kodak film grain.\n\nActive References Lock:\n- Reference 1: Claire, adult 24-year-old woman, FULLY DRY, ivory belted trench coat over grey silk slip dress, upright and serene (100% match face, hair, outfit to Reference 1 char_claire.jpg — NO wet hair, NO wet patches).\n- Reference 2: Damien, adult 32-year-old man in midnight-black cashmere overcoat over matte black shirt, walking respectfully half a step behind (100% match Reference 2).\n- Reference 3: Luxury checkered black-and-white marble foyer leading toward bright glass exit doors (100% match Reference 3).\n\n[0.0s - 4.2s] SHOT A - 47 degree SIDE-TRACKING FOLLOW SHOT:\nClaire strides steadily forward down the bright checkered marble foyer with calm upright posture, Damien following respectfully half a step behind. Claire states quietly finishing before 3.9s: \"Vance Capital now holds every creditor in this city.\"\n\n[4.2s - 10.0s] HARD CUT TO SHOT B - 18 degree SIDE-PROFILE CLOSE-UP OF CLAIRE:\nCool dawn daylight catches her dry hair and composed profile. Without turning back, with natural restraint, she states finishing before 9.3s with mouth closing cleanly: \"This was not a takeover. This was a reckoning.\" She continues striding toward the bright glass exit doors."
+    }
+  }
+}
