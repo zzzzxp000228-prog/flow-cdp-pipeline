@@ -30,6 +30,17 @@ EP04 主题：**清算正式开始**。董事会审计启动 → 反派密谋反
   `C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\DevToolsActivePort`
   读第一行端口 + 第二行路径拼 WebSocket，连 browser 端点后 `Target.getTargets` 找 `flow.google.com/project/` 标签页。标准 Chrome profile 不支持 `/json/list`。找不到标签页就先在 Chrome 打开并登录 Flow 项目页。
 
+## 新场景生成规则（仅当现有资产不够时触发）
+
+EP04 六镜剧本已经全部映射到既有资产（ballroom 宴会厅 / foyer 门厅 / blueprint_seal 蓝图印章），正常情况下**不需要生成新场景**。如果实际生成中发现某个环境板不合适、确实缺新场景，按下面规则处理：
+
+- 用 **Google Flow 内置的生图工具**现场生成新场景图。不要改用外部生图服务、不要用本地软件拼图、不要换掉角色参考图、也不要改写镜头 prompt 硬凑。
+- 复用已经建立的那条 CDP 单连接，不要新开连接。在 Flow 里切到图片生成/工具模式，用 `Runtime.evaluate` 观察当前 UI 定位生图入口和输入框，按现场实际界面操作（交接手册只覆盖了视频生成和素材上传，生图入口没有现成脚本封装，需要你像之前逆向 picker 那样现场定位——这一步本机未执行，属现场操作）。
+- 生图 prompt 规范：空景、无人物、无酒杯；写明光线（清晨冷光 / 暖吊灯）和材质（胡桃木 / 棋盘大理石 / 黄铜）；风格跟既有 plate 一致（真实胶片质感，不要插画或卡通）。
+- 生成的图片用与 720p Blob 下载相同的方式保存到项目 `assets/`，命名 `plate_<场景名>.jpg`，横向场景板优先 16:9。
+- 落盘后登记：写进 `flow_manifest.json` 的 assets 段和 `config/settings.json` 的 assets 映射（key 如 `boardroom`），再把 `examples/ep04_sequences.json` 对应镜头的 refs 换成新 key。仍然遵守每镜参考图 ≤3 张、人脸 ≤2 张的规则。
+- 若只是换角度/光线就能用现有场景，优先复用，不为省事新建资产。
+
 ## 第三步：生成六镜原片
 
 所有命令在仓库根目录执行：
@@ -84,6 +95,7 @@ output/final_qa_sheet_ep04.png
 
 - 严禁修改 `output/` 下已有的 EP01、EP02、EP01_02_Combined、EP03 成片。只新增 EP04 文件。
 - 角色与场景资产沿用 `flow_manifest.json` 与 `assets/`，严禁换脸、换服装风格。Claire 全程全干、象牙风衣。
+- 若需新场景，只用 Google Flow 内置生图工具生成，按上面「新场景生成规则」落盘登记；不引入外部生图、不改动既有角色资产。
 - 每一步给一句进度；失败明确报卡在哪步和报错原文，不要静默跳过。
 
 ===== 指令结束 =====
