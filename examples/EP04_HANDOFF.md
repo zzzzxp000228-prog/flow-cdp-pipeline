@@ -12,6 +12,37 @@
 
 EP04 主题：**清算正式开始**。董事会审计启动 → 反派密谋反扑 → Marcus 伪造签名诬陷 → Claire 出示鉴证证据反杀 → Marcus 崩溃 → Claire 宣告"这不是收购，是清算"。承接 EP03 结尾，节奏保持冷冽克制。
 
+## 第零步：先看片（动手前必须做）
+
+在写任何东西、生成任何镜头之前，先实际看一遍已定稿的 EP01-EP03 成片，把人物长相、服装、场景、表演节奏和剧情衔接看进脑子，再往下写。不要只看文字梗概就动手。
+
+用抽帧方式看片（ffmpeg 每隔数秒抽一帧，再用看图工具逐张看）：
+
+```
+cd "C:\Users\Administrator\.gemini\antigravity\scratch\short_drama_western_broken_engagement_ep01\output"
+```
+
+要看的成片（中英双语版，带字幕便于对剧情）：
+- `EP01_02_Combined_Full_EN_ZH_1080p60.mp4`（100s，EP01+EP02 合并版，优先看这个）
+- `EP03_Western_Broken_Engagement_EN_ZH_1080p60.mp4`（60s，紧接的上一集，必须看）
+
+如需分开看单集：`EP01_Western_Broken_Engagement_EN_ZH_1080p60.mp4`（61s）、`EP02_Western_Broken_Engagement_EN_ZH_1080p60.mp4`（52s）。
+
+抽帧命令示例（每 2 秒一帧，输出到临时图目录后逐张查看）：
+
+```
+mkdir -p /tmp/ep_review
+ffmpeg -y -i "EP03_Western_Broken_Engagement_EN_ZH_1080p60.mp4" -vf "fps=0.5,scale=540:-1" /tmp/ep_review/ep03_%03d.jpg
+```
+
+看片时重点确认，作为 EP04 的衔接基准：
+- 各角色实际长相与服装：Claire（象牙风衣、灰裙、全干）、Damien（黑色羊绒大衣）、Marcus（炭灰三件套）、Chloe（深红礼服）——后续严禁换脸换装。
+- 反复出现的场景：棋盘大理石门厅、深色胡桃木吊灯宴会厅、带红色 V 印章的蓝色建筑蓝图。
+- 结尾情绪与悬点：EP03 收在 Claire 宣告"这只是开局"，EP04 要从这里无缝接上。
+- 表演节奏：冷冽克制、硬切、人物在句末自然闭嘴，不要夸张表情。
+
+看完用两三句话说明你从片里确认的角色/场景/衔接点，再进入下一步。
+
 ## 第一步：读规范与剧本
 
 1. 用文件读取工具读交接手册并完全遵守：
